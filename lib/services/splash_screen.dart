@@ -25,20 +25,20 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Positioned.fill(
-          //   child: Image.asset('assets/images/ok.png', fit: BoxFit.cover),
-          // ),
-          Center(
-            child: SizedBox(
-              height: 80,
-              width: 80,
-              child: LoadingIndicator(
-                indicatorType: Indicator.audioEqualizer,
-                colors: [Colors.purple, Colors.blue, Colors.green],
-                strokeWidth: 10,
-              ),
-            ),
-          )
+          Positioned.fill(
+            child: Image.asset('assets/images/mobile.jpeg', fit: BoxFit.cover),
+          ),
+          // Center(
+          //   child: SizedBox(
+          //     height: 80,
+          //     width: 80,
+          //     child: LoadingIndicator(
+          //       indicatorType: Indicator.audioEqualizer,
+          //       colors: [Colors.purple, Colors.blue, Colors.green],
+          //       strokeWidth: 10,
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
