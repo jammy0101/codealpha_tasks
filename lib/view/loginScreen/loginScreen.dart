@@ -140,10 +140,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     textColor: AppColor.blackColor,
                   );
                 }),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
-                  child: Text('or continue'),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(child: Divider(thickness: 2,color: AppColor.blackColor,)),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Or Continue'),
+                    ),
+                    Expanded(child: Divider(thickness: 2,color: AppColor.blackColor,)),
+                  ],
                 ),
+                SizedBox(height: 10),
                 Obx(() {
                   return  RoundButton2(
                     width: 377,

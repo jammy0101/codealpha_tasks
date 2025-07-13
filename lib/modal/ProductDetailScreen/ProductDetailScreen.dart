@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/modal/mobile_modal/mobil_modal.dart';
 import 'package:ecommerce/resources/color/color.dart';
 import 'package:ecommerce/viewModal/firebase_services/firebase_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import '../productModel/product_Model.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final Product product;
+  final MobileModel product;
 
-   ProductDetailScreen({super.key, required this.product});
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -19,55 +18,31 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-
   final FirebaseServices firebaseServices = Get.put(FirebaseServices());
-
   double currentRating = 0.0;
+  int quantityToAdd = 1; // place inside StatefulWidget
 
-  // ::::::::::::::>> ABOUT RATING <<:::::::::::::::::
+
   @override
   void initState() {
     super.initState();
     fetchUserRating();
   }
 
-  // Future<void> saveRatingToFirestore(double rating) async {
-  //   final String userId = auth.currentUser!.uid;
-  //   if (auth.currentUser == null) {
-  //     Get.snackbar("Error", "User not logged in");
-  //     return;
-  //   }
-  //   final DocumentReference ratingRef = FirebaseFirestore.instance
-  //       .collection('product_ratings')
-  //       .doc(widget.product.id)
-  //       .collection('user_ratings')
-  //       .doc(userId);
-  //
-  //   await ratingRef.set({
-  //     'rating': rating,
-  //     'timestamp': FieldValue.serverTimestamp(),
-  //   });
-  //
-  //   print("Rating saved for ${widget.product.id} by $userId");
-  // }
   Future<void> saveRatingToFirestore(double rating) async {
     if (auth.currentUser == null) {
       Get.snackbar("Error", "User not logged in");
       return;
     }
-
     final String userId = auth.currentUser!.uid;
 
-    // Fetch user name from 'users_profile' collection
     final userDoc = await FirebaseFirestore.instance
-        .collection('users_profile') // using your actual collection
+        .collection('users_profile')
         .doc(userId)
         .get();
-
     final userName = userDoc.data()?['name'] ?? 'Unknown';
 
-
-    final DocumentReference ratingRef = FirebaseFirestore.instance
+    final ratingRef = FirebaseFirestore.instance
         .collection('product_ratings')
         .doc(widget.product.id)
         .collection('user_ratings')
@@ -78,37 +53,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       'timestamp': FieldValue.serverTimestamp(),
       'userName': userName,
     });
-
-    print("Rating saved for ${widget.product.id} by $userId ($userName)");
   }
 
-
-
-  // Future<void> fetchUserRating() async {
-  //   final userId = auth.currentUser!.uid;
-  //   if (auth.currentUser == null) {
-  //     Get.snackbar("Error", "User not logged in");
-  //     return;
-  //   }
-  //   final doc = await FirebaseFirestore.instance
-  //       .collection('product_ratings')
-  //       .doc(widget.product.id)
-  //       .collection('user_ratings')
-  //       .doc(userId)
-  //       .get();
-  //
-  //   if (doc.exists) {
-  //     setState(() {
-  //       currentRating = doc['rating'];
-  //     });
-  //   }
-  // }
   Future<void> fetchUserRating() async {
     if (auth.currentUser == null) {
       Get.snackbar("Error", "User not logged in");
       return;
     }
-
     final userId = auth.currentUser!.uid;
 
     final doc = await FirebaseFirestore.instance
@@ -121,11 +72,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     if (doc.exists) {
       setState(() {
         currentRating = doc['rating'];
-         //userName = doc['userName']; // Optional: store if you want to show name
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,13 +95,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Product Image
               Hero(
                 tag: widget.product.id,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    widget.product.imageUrl,
+                    widget.product.image,
                     width: double.infinity,
                     height: 250,
                     fit: BoxFit.cover,
@@ -160,7 +108,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              // Product Name
               Text(
                 widget.product.name,
                 style: const TextStyle(
@@ -169,7 +116,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   color: Colors.black87,
                 ),
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   RatingBar.builder(
@@ -178,20 +125,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     allowHalfRating: true,
                     itemCount: 5,
                     itemSize: 30,
-                    itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber),
+                    itemBuilder: (context, _) =>
+                    const Icon(Icons.star, color: Colors.amber),
                     onRatingUpdate: (rating) {
                       setState(() => currentRating = rating);
                       saveRatingToFirestore(rating);
                     },
                   ),
                   const SizedBox(width: 10),
-                  Text(currentRating.toStringAsFixed(1), style: const TextStyle(fontSize: 18)),
+                  Text(currentRating.toStringAsFixed(1),
+                      style: const TextStyle(fontSize: 18)),
                 ],
               ),
-
-
               const SizedBox(height: 12),
-              // Product Description
               Text(
                 widget.product.description,
                 style: const TextStyle(
@@ -200,10 +146,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   color: Colors.black54,
                 ),
               ),
-
               const SizedBox(height: 20),
-
-              // Price
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -217,18 +160,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Add to cart logic here
+                      // Add to cart logic here using MobileModel
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.wow2,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child:  Text(
+                    child: Text(
                       "Add to Cart",
-                      style: TextStyle(fontSize: 16,color: AppColor.whiteColor),
+                      style:
+                      TextStyle(fontSize: 16, color: AppColor.whiteColor),
                     ),
                   ),
                 ],

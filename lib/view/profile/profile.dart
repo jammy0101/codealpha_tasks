@@ -34,43 +34,13 @@ class _ProfileState extends State<Profile> {
 
 
   bool isLoading = true;
-  File? _imageFile;
+  //File? _imageFile;
 
   @override
   void initState() {
     super.initState();
     loadUserProfile();
   }
-
-  // Future<void> loadUserProfile() async {
-  //   final uid = auth.currentUser?.uid;
-  //   if (uid == null) return;
-  //
-  //   try {
-  //     final doc = await firestore.collection('users_profile').doc(uid).get();
-  //
-  //     if (doc.exists && doc.data() != null) {
-  //       final data = doc.data()!;
-  //       displayName.text = data['displayName'] ?? '';
-  //       phoneController.text = data['phoneNumber'] ?? '';
-  //       selectedGender = data['gender'] ?? 'Male';
-  //       addressController.text = data['address'] ?? '';
-  //       final imageUrl = data['photoURL'] as String?;
-  //       if (imageUrl != null && imageUrl.isNotEmpty) {
-  //         setState(() {
-  //           profileImageUrl = imageUrl;
-  //         });
-  //       }
-  //
-  //     }
-  //   } catch (e) {
-  //     print("Error loading user profile: $e");
-  //   } finally {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
 
   Future<void> loadUserProfile() async {
     final uid = auth.currentUser?.uid;
@@ -81,17 +51,15 @@ class _ProfileState extends State<Profile> {
 
       if (doc.exists && doc.data() != null) {
         final data = doc.data()!;
-
         setState(() {
           displayName.text = data['displayName'] ?? '';
           phoneController.text = data['phoneNumber'] ?? '';
           selectedGender = data['gender'] ?? 'Male';
           addressController.text = data['address'] ?? '';
-
-          final imageUrl = data['photoURL'] as String?;
-          if (imageUrl != null && imageUrl.isNotEmpty) {
-            profileImageUrl = imageUrl;
-          }
+          // final imageUrl = data['photoURL'] as String?;
+          // if (imageUrl != null && imageUrl.isNotEmpty) {
+          //   profileImageUrl = imageUrl;
+          // }
 
           isLoading = false;
         });
@@ -139,7 +107,7 @@ class _ProfileState extends State<Profile> {
       'phoneNumber': phoneController.text.trim(),
       'gender': selectedGender,
       'address': addressController.text,
-      'photoURL': profileImageUrl, // ✅ Save image URL here
+      //'photoURL': profileImageUrl, // ✅ Save image URL here
     }, SetOptions(merge: true));
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -348,48 +316,48 @@ class _ProfileState extends State<Profile> {
   }
 
 
-  Future<void> pickImageFromGallery() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  // Future<void> pickImageFromGallery() async {
+  //   final picker = ImagePicker();
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //
+  //   if (pickedFile != null) {
+  //     _imageFile = File(pickedFile.path);
+  //     await uploadImageToFirebase(); // this sets profileImageUrl & updates Firestore
+  //   } else {
+  //     print("❌ No image selected.");
+  //   }
+  // }
 
-    if (pickedFile != null) {
-      _imageFile = File(pickedFile.path);
-      await uploadImageToFirebase(); // this sets profileImageUrl & updates Firestore
-    } else {
-      print("❌ No image selected.");
-    }
-  }
-
-  Future<void> uploadImageToFirebase() async {
-    if (_imageFile == null) return;
-    final uid = auth.currentUser?.uid;
-    if (uid == null) return;
-
-    try {
-      final ref = storage.ref().child('user_profiles/$uid.jpg');
-      await ref.putFile(_imageFile!);
-
-      final imageUrl = await ref.getDownloadURL();
-
-      // Update profileImageUrl in Firestore
-      await firestore.collection('users_profile').doc(uid).update({
-        'photoURL': imageUrl,
-      });
-
-      setState(() {
-        profileImageUrl = imageUrl;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("✅ Profile picture uploaded")),
-      );
-    } catch (e) {
-      print("❌ Error uploading image: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("❌ Failed to upload image")),
-      );
-    }
-  }
+  // Future<void> uploadImageToFirebase() async {
+  //   if (_imageFile == null) return;
+  //   final uid = auth.currentUser?.uid;
+  //   if (uid == null) return;
+  //
+  //   try {
+  //     final ref = storage.ref().child('user_profiles/$uid.jpg');
+  //     await ref.putFile(_imageFile!);
+  //
+  //     final imageUrl = await ref.getDownloadURL();
+  //
+  //     // Update profileImageUrl in Firestore
+  //     await firestore.collection('users_profile').doc(uid).update({
+  //       'photoURL': imageUrl,
+  //     });
+  //
+  //     setState(() {
+  //       profileImageUrl = imageUrl;
+  //     });
+  //
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("✅ Profile picture uploaded")),
+  //     );
+  //   } catch (e) {
+  //     print("❌ Error uploading image: $e");
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text("❌ Failed to upload image")),
+  //     );
+  //   }
+  // }
 
 
 
@@ -400,12 +368,11 @@ class _ProfileState extends State<Profile> {
       bottomNavigationBar: BottomNavigation(index: 3),
       appBar: AppBar(
         title: const Text('Profile'),
+        automaticallyImplyLeading: false,
         backgroundColor: AppColor.wow2,
         centerTitle: true,
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
+      body: SingleChildScrollView(
               child: Column(
                 children: [
                   Stack(
@@ -452,7 +419,7 @@ class _ProfileState extends State<Profile> {
                                   child: InkWell(
                                     onTap: () async {
                                       print('Camera icon tapped');
-                                      await pickImageFromGallery();
+                                      //await pickImageFromGallery();
                                     },
                                     child: const CircleAvatar(
                                       radius: 15,

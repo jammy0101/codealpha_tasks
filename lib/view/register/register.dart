@@ -151,7 +151,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ],
                     )
                 ),
-                Text('or Continue'),
+                Row(
+                  children: [
+                    Expanded(child: Divider(thickness: 2,color: AppColor.blackColor,)),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Or Continue'),
+                    ),
+                    Expanded(child: Divider(thickness: 2,color: AppColor.blackColor,)),
+                  ],
+                ),
                 SizedBox(height: 16,),
                 Obx(() {
                   return  RoundButton2(

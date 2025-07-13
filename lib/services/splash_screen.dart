@@ -1,6 +1,5 @@
 import 'package:ecommerce/services/splash_services.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 
 class SplashScreen extends StatefulWidget {
