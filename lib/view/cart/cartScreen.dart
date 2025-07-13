@@ -198,7 +198,9 @@ class _CartScreenState extends State<CartScreen> {
                 itemBuilder: (_, index) {
                   final item = productController.cart[index];
                   return  Card(
-                    elevation: 4,
+                    color: AppColor.whiteColor,
+
+                    elevation: 10,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: Padding(

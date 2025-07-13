@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import '../../modal/mobile_modal/mobil_modal.dart';
-import '../../modal/mobile_modal/mobile_modalList.dart';
-
 
 class ProductController extends GetxController {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   var products = <MobileModel>[].obs;
   var favorites = <String>{}.obs;
@@ -12,28 +12,53 @@ class ProductController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    products.assignAll(fetchProducts()); // ✅ Assign static list on start
+    loadProducts(); // Load all products at startup
   }
 
-  List<MobileModel> fetchProducts() {
-    return mobileList; // ✅ From your static list
+  Future<void> loadProducts() async {
+    final snapshot = await _firestore.collection('products').get();
+    products.value =
+        snapshot.docs.map((doc) => MobileModel.fromJson(doc.data())).toList();
   }
 
-  void toggleFavorite(String productId) {
-    if (favorites.contains(productId)) {
-      favorites.remove(productId);
-    } else {
-      favorites.add(productId);
+  Future<List<MobileModel>> getProductsByCategory(String category) async {
+    final snapshot = await _firestore
+        .collection('products')
+        .where('category', isEqualTo: category)
+        .get();
+
+    return snapshot.docs.map((doc) => MobileModel.fromJson(doc.data())).toList();
+  }
+  Future<void> uploadCategoriesToFirestore() async {
+    final categories = [
+      {'name': 'Samsung', 'image': 'assets/images/samsung1.png'},
+      {'name': 'iPhone', 'image': 'assets/images/iphone.png'},
+      {'name': 'Vivo', 'image': 'assets/images/vivo.jpg'},
+      {'name': 'Infinix', 'image': 'assets/images/infinixhot10.jpg'},
+      {'name': 'RedMe', 'image': 'assets/images/RedMe.png'},
+      {'name': 'Oppo', 'image': 'assets/images/opoo.jpg'},
+    ];
+
+    final collection = FirebaseFirestore.instance.collection('categories');
+    for (final category in categories) {
+      await collection.doc(category['name']).set(category);
+    }
+
+    print('✅ Categories uploaded');
+  }
+
+  // Optional one-time upload
+  Future<void> uploadProductsToFirestore(List<MobileModel> mobileList) async {
+    final collection = _firestore.collection('products');
+    for (final product in mobileList) {
+      await collection.doc(product.id).set(product.toJson());
     }
   }
 
-  void removeFromCart(String productId) {
-    cart.removeWhere((item) => item.id == productId);
-    cart.refresh();
-    Get.snackbar("Cart", "Item removed from cart");
+  // Cart/Favorites logic...
+  void toggleFavorite(String productId) {
+    favorites.contains(productId) ? favorites.remove(productId) : favorites.add(productId);
   }
-
-
 
   void addToCart(MobileModel product) {
     final index = cart.indexWhere((item) => item.id == product.id);
@@ -44,6 +69,12 @@ class ProductController extends GetxController {
     }
     cart.refresh();
     Get.snackbar("Cart", "${product.name} added to cart");
+  }
+
+  void removeFromCart(String productId) {
+    cart.removeWhere((item) => item.id == productId);
+    cart.refresh();
+    Get.snackbar("Cart", "Item removed from cart");
   }
 
   void incrementQuantity(String productId) {
@@ -69,5 +100,3 @@ class ProductController extends GetxController {
   int get cartItemCount => cart.fold(0, (sum, item) => sum + item.quantity);
   double get totalPrice => cart.fold(0.0, (sum, item) => sum + item.price * item.quantity);
 }
-
-

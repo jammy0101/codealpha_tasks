@@ -1,3 +1,4 @@
+import 'package:ecommerce/resources/category_services/category_services.dart';
 import 'package:ecommerce/resources/routes/routes.dart';
 import 'package:ecommerce/resources/routes/routes_name.dart';
 import 'package:ecommerce/view/homeScreen/homeScreen.dart';
@@ -16,7 +17,7 @@ void main()async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  //await uploadCategoriesToFirestore(); // 👈 call this once
   Get.put(ProductController(), permanent: true);
 
   runApp(const MyApp());

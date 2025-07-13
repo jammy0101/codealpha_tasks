@@ -56,11 +56,6 @@ class _ProfileState extends State<Profile> {
           phoneController.text = data['phoneNumber'] ?? '';
           selectedGender = data['gender'] ?? 'Male';
           addressController.text = data['address'] ?? '';
-          // final imageUrl = data['photoURL'] as String?;
-          // if (imageUrl != null && imageUrl.isNotEmpty) {
-          //   profileImageUrl = imageUrl;
-          // }
-
           isLoading = false;
         });
       } else {
@@ -316,48 +311,6 @@ class _ProfileState extends State<Profile> {
   }
 
 
-  // Future<void> pickImageFromGallery() async {
-  //   final picker = ImagePicker();
-  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-  //
-  //   if (pickedFile != null) {
-  //     _imageFile = File(pickedFile.path);
-  //     await uploadImageToFirebase(); // this sets profileImageUrl & updates Firestore
-  //   } else {
-  //     print("❌ No image selected.");
-  //   }
-  // }
-
-  // Future<void> uploadImageToFirebase() async {
-  //   if (_imageFile == null) return;
-  //   final uid = auth.currentUser?.uid;
-  //   if (uid == null) return;
-  //
-  //   try {
-  //     final ref = storage.ref().child('user_profiles/$uid.jpg');
-  //     await ref.putFile(_imageFile!);
-  //
-  //     final imageUrl = await ref.getDownloadURL();
-  //
-  //     // Update profileImageUrl in Firestore
-  //     await firestore.collection('users_profile').doc(uid).update({
-  //       'photoURL': imageUrl,
-  //     });
-  //
-  //     setState(() {
-  //       profileImageUrl = imageUrl;
-  //     });
-  //
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text("✅ Profile picture uploaded")),
-  //     );
-  //   } catch (e) {
-  //     print("❌ Error uploading image: $e");
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text("❌ Failed to upload image")),
-  //     );
-  //   }
-  // }
 
 
 
@@ -399,14 +352,6 @@ class _ProfileState extends State<Profile> {
                                   ),
                                   child: CircleAvatar(
                                     radius: 50,
-                                    // backgroundImage: _imageFile != null
-                                    //     ? FileImage(_imageFile!)
-                                    //     : const AssetImage("assets/images/women.jpg") as ImageProvider,
-                                    // backgroundImage: _imageFile != null
-                                    //     ? FileImage(_imageFile!)
-                                    //     : profileImageUrl != null
-                                    //     ? NetworkImage(profileImageUrl!)
-                                    //     : const AssetImage("assets/images/women.jpg") as ImageProvider,
                                       backgroundImage: profileImageUrl != null
                                           ? NetworkImage(profileImageUrl!)
                                           : const AssetImage('assets/images/women.jpg')
