@@ -1,6 +1,7 @@
 import 'package:ecommerce/modal/ProductDetailScreen/ProductDetailScreen.dart';
 import 'package:ecommerce/modal/productModel/product_Model.dart';
 import 'package:ecommerce/view/categories/catogries.dart';
+import 'package:ecommerce/view/paymentMethod/payment.dart';
 import 'package:ecommerce/view/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -74,6 +75,13 @@ class AppRoutes {
       transitionDuration: Duration(milliseconds: 250),
     ),
 
+    GetPage(
+      name: RoutesName.payment,
+      page: () => Payment(),
+      binding: AuthBinding(),
+      transition: Transition.leftToRightWithFade,
+      transitionDuration: Duration(milliseconds: 250),
+    ),
   ];
 }
 

@@ -10,4 +10,5 @@ class RoutesName {
   static final String profile = '/profile_screen';
   static final String category = '/category_screen';
   static final String productDetails = '/product_details';
+  static final String payment = '/payment_method';
 }

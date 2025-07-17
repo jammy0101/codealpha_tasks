@@ -1270,6 +1270,11 @@ PODS:
     - GoogleUtilities/Environment (~> 8.1)
     - GTMSessionFetcher/Core (< 5.0, >= 3.4)
   - Flutter (1.0.0)
+  - flutter_image_compress_common (1.0.0):
+    - Flutter
+    - Mantle
+    - SDWebImage
+    - SDWebImageWebPCoder
   - fluttertoast (0.0.2):
     - Flutter
   - GoogleUtilities/AppDelegateSwizzler (8.1.0):
@@ -1389,14 +1394,38 @@ PODS:
   - image_picker_ios (0.0.1):
     - Flutter
   - leveldb-library (1.22.6)
+  - libwebp (1.5.0):
+    - libwebp/demux (= 1.5.0)
+    - libwebp/mux (= 1.5.0)
+    - libwebp/sharpyuv (= 1.5.0)
+    - libwebp/webp (= 1.5.0)
+  - libwebp/demux (1.5.0):
+    - libwebp/webp
+  - libwebp/mux (1.5.0):
+    - libwebp/demux
+  - libwebp/sharpyuv (1.5.0)
+  - libwebp/webp (1.5.0):
+    - libwebp/sharpyuv
+  - Mantle (2.2.0):
+    - Mantle/extobjc (= 2.2.0)
+  - Mantle/extobjc (2.2.0)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
   - RecaptchaInterop (101.0.0)
+  - SDWebImage (5.21.1):
+    - SDWebImage/Core (= 5.21.1)
+  - SDWebImage/Core (5.21.1)
+  - SDWebImageWebPCoder (0.14.6):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.17)
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -1405,8 +1434,10 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
 SPEC REPOS:
@@ -1429,8 +1460,12 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - leveldb-library
+    - libwebp
+    - Mantle
     - nanopb
     - RecaptchaInterop
+    - SDWebImage
+    - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
   cloud_firestore:
@@ -1445,10 +1480,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  flutter_image_compress_common:
+    :path: ".symlinks/plugins/flutter_image_compress_common/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
@@ -1472,6 +1511,7 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: e17c654ef1f1a616b0b33054e663ad1035c8fd40
   FirebaseStorage: 50fc9ee147392943e492467db6b52759b0447037
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_image_compress_common: ec1d45c362c9d30a3f6a0426c297f47c52007e3e
   fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   "gRPC-C++": cc207623316fb041a7a3e774c252cf68a058b9e8
@@ -1479,9 +1519,14 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: fc75fc972958dceedee61cb662ae1da7a83a91cf
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
+  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
+  Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
+  SDWebImage: f29024626962457f3470184232766516dee8dfea
+  SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
 
 PODFILE CHECKSUM: a901b0534ebff1a81cfb53fbf723b1bca433de9f
 

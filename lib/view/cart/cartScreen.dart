@@ -153,6 +153,7 @@
 // }
 
 
+import 'package:ecommerce/resources/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../resources/color/color.dart';
@@ -200,7 +201,7 @@ class _CartScreenState extends State<CartScreen> {
                   return  Card(
                     color: AppColor.whiteColor,
 
-                    elevation: 10,
+                    elevation: 19,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: Padding(
@@ -298,7 +299,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       onPressed: () {
                         // TODO: Handle checkout
-                        Get.snackbar("Checkout", "Proceeding to checkout...");
+                        Get.toNamed(RoutesName.payment);
                       },
                       child: Text("Checkout", style: TextStyle(fontSize: 16)),
                     ),
