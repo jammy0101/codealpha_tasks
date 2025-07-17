@@ -42,6 +42,7 @@ class MobileModel {
     );
   }
 
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -53,4 +54,27 @@ class MobileModel {
       'quantity': quantity,
     };
   }
+  factory MobileModel.fromMap(Map<String, dynamic> map) {
+    return MobileModel(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      price: map['price']?.toDouble() ?? 0.0,
+      image: map['image'] ?? '',
+      category: map['category'] ?? '',
+      description: map['description'] ?? '',
+      quantity: map['quantity'] ?? 0,
+    );
+  }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'image': image,
+      'category': category,
+      'description': description,
+      'quantity': quantity,
+    };
+  }
+
 }

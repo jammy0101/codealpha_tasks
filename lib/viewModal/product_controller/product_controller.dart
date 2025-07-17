@@ -9,6 +9,8 @@ class ProductController extends GetxController {
   var favorites = <String>{}.obs;
   var cart = <MobileModel>[].obs;
 
+
+
   @override
   void onInit() {
     super.onInit();
@@ -84,6 +86,14 @@ class ProductController extends GetxController {
       cart.refresh();
     }
   }
+
+  Future<void> deleteProduct(String productId) async {
+    await _firestore.collection('products').doc(productId).delete();
+    products.removeWhere((p) => p.id == productId);
+    products.refresh();
+    Get.snackbar("Deleted", "Product has been deleted");
+  }
+
 
   void decrementQuantity(String productId) {
     final index = cart.indexWhere((item) => item.id == productId);

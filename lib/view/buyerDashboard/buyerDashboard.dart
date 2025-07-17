@@ -13,23 +13,22 @@ import '../../resources/customDrawer/drawer.dart';
 import '../../viewModal/product_controller/product_controller.dart';
 import '../cart/cartScreen.dart';
 
-class HomeScreen extends StatefulWidget {
+class buyerDashboard extends StatefulWidget {
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<buyerDashboard> createState() => _buyerDashboardState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _buyerDashboardState extends State<buyerDashboard> {
   final ProductController productController = Get.put(ProductController());
 
   List<String> banners = [
     'assets/images/shop.jpg',
     'assets/images/mobile.jpeg',
-    'assets/images/women.jpg',
+    'assets/images/samsung1.png',
   ];
+  final RxString searchQuery = ''.obs;
 
   Future<void> _refreshProducts() async {
-    // final fetchedProducts = productController.fetchProducts();
-    // productController.products.assignAll(fetchedProducts);
     await productController.loadProducts();
 
   }
@@ -145,11 +144,49 @@ class _HomeScreenState extends State<HomeScreen> {
               }).toList(),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 30,
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: TextField(
+                onChanged: (value) => searchQuery.value = value.toLowerCase(),
+                style: TextStyle(fontSize: 16),
+                decoration: InputDecoration(
+                  hintText: 'Search for mobiles...',
+                  hintStyle: TextStyle(color: Colors.grey[500]),
+                  prefixIcon: Icon(Icons.search, color: Colors.black54),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: Obx(() {
-              if (productController.products.isEmpty) {
-                return Center(child: CircularProgressIndicator());
+              final query = searchQuery.value.trim();
+              final filteredProducts = query.isEmpty
+                  ? productController.products
+                  : productController.products
+                  .where((product) =>
+              product.name.toLowerCase().contains(query) ||
+                  product.description.toLowerCase().contains(query))
+                  .toList();
+            
+              if (filteredProducts.isEmpty) {
+                return Center(child: Text("No products found."));
               }
+            
               return RefreshIndicator(
                 onRefresh: _refreshProducts,
                 child: GridView.builder(
@@ -160,9 +197,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
-                  itemCount: productController.products.length,
+                  itemCount: filteredProducts.length,
                   itemBuilder: (_, index) {
-                    final product = productController.products[index];
+                    final product = filteredProducts[index];
                     return GestureDetector(
                       onTap: () {
                         Get.to(() => ProductDetailScreen(product: product));
@@ -212,11 +249,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ElevatedButton(
                               onPressed: () {
                                 productController.addToCart(product);
-                                //Get.toNamed(RoutesName.cartScreen);
                               },
                               child: Text("Add to Cart"),
                             ),
-
                           ],
                         ),
                       ),
@@ -225,7 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }),
-          ),
+          )
+
         ],
       ),
     );

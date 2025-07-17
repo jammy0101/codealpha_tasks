@@ -21,6 +21,7 @@ class CustomTextFieldEmail extends StatelessWidget {
         style: TextStyle(color: AppColor.blackColor),
         controller: controller,
         textCapitalization: TextCapitalization.words,
+        keyboardType: TextInputType.emailAddress,
         decoration:  InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(color: AppColor.blackColor),

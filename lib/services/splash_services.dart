@@ -15,7 +15,7 @@ class SplashService {
 
       Timer(const Duration(seconds: 2), () {
         if (user != null) {
-          Get.offAllNamed(RoutesName.homeScreen);
+          Get.offAllNamed(RoutesName.buyerDashboard);
         } else {
           Get.offAllNamed(RoutesName.loginScreen);
         }

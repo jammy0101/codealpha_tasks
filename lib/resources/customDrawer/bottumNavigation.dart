@@ -38,7 +38,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
           switch (index) {
             case 0:
-              Get.offAllNamed(RoutesName.homeScreen);
+              Get.offAllNamed(RoutesName.buyerDashboard);
               break;
             case 1:
               Get.offAllNamed(RoutesName.category);

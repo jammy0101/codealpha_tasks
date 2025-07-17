@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../modal/mobile_modal/orderModal.dart';
+import '../../view/sellerDashboard/sellerDashboard.dart';
 import '../../viewModal/firebase_services/firebase_services.dart';
+import '../../viewModal/orderController/oredrController.dart';
+import '../../viewModal/product_controller/product_controller.dart';
 import '../color/color.dart';
 import '../routes/routes_name.dart';
 import '../utils/utils.dart';
@@ -10,6 +14,30 @@ class CustomDrawer extends StatelessWidget {
   final FirebaseAuth auth;
 
   const CustomDrawer({super.key, required this.auth});
+  void _placeOrder() {
+    final productController = Get.find<ProductController>();
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
+    if (productController.cart.isEmpty) {
+      Get.snackbar("Cart Empty", "Add items to cart before placing an order.");
+      return;
+    }
+
+    final newOrder = OrderModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      items: productController.cart.toList(),
+      total: productController.totalPrice,
+      userId: userId,
+      createdAt: DateTime.now(),
+      status: 'pending',
+    );
+
+    final orderController = Get.put(OrderController());
+    orderController.placeOrder(newOrder);
+    productController.cart.clear(); // Clear cart
+
+    Get.snackbar("Order Placed", "Your order has been placed successfully!");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +66,7 @@ class CustomDrawer extends StatelessWidget {
               'Home',
               style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.wow1),
             ),
-            onTap: () =>  Get.toNamed(RoutesName.homeScreen),
+            onTap: () =>  Get.toNamed(RoutesName.buyerDashboard),
           ),
           ListTile(
             leading: const Icon(Icons.category, color: Colors.black),
@@ -49,6 +77,12 @@ class CustomDrawer extends StatelessWidget {
             onTap: () =>  Get.toNamed(RoutesName.category),
           ),
           ListTile(
+            leading: Icon(Icons.dashboard),
+            title: Text('Seller Dashboard'),
+            onTap: () => Get.to(() => SellerDashboard()),
+          ),
+
+          ListTile(
             leading: const Icon(Icons.shopping_cart, color: Colors.black),
             title: const Text(
               'cart',
@@ -56,6 +90,29 @@ class CustomDrawer extends StatelessWidget {
             ),
             onTap: () =>  Get.toNamed(RoutesName.cartScreen),
           ),
+          ListTile(
+            leading: const Icon(Icons.check_circle_outline, color: Colors.black),
+            title: const Text(
+              'Place Order',
+              style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.wow1),
+            ),
+            onTap: () {
+              _placeOrder();
+              Navigator.of(context).pop(); // Close drawer after placing order
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.history, color: Colors.black),
+            title: const Text(
+              'Order History',
+              style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.wow1),
+            ),
+            onTap: () {
+              Navigator.of(context).pop(); // Close drawer
+              Get.toNamed(RoutesName.orderHistory);
+            },
+          ),
+
           ListTile(
             leading: const Icon(Icons.person, color: Colors.black),
             title: const Text(

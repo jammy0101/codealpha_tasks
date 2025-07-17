@@ -1,163 +1,11 @@
-// // import 'package:firebase_auth/firebase_auth.dart';
-// // import 'package:flutter/cupertino.dart';
-// // import 'package:flutter/material.dart';
-// // import 'package:get/get.dart';
-// // import 'package:get/get_core/src/get_main.dart';
-// // import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-// // import '../../resources/color/color.dart';
-// // import '../../resources/customDrawer/bottumNavigation.dart';
-// // import '../../resources/customDrawer/drawer.dart';
-// // import '../../viewModal/product_controller/product_controller.dart';
-// //
-// // class CartScreen extends StatefulWidget {
-// //   @override
-// //   State<CartScreen> createState() => _CartScreenState();
-// // }
-// //
-// // class _CartScreenState extends State<CartScreen> {
-// //   final ProductController productController = Get.find<ProductController>();
-// //
-// //
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       backgroundColor: AppColor.whiteColor,
-// //       appBar: AppBar(
-// //           title: Text('My Cart'),
-// //         centerTitle: true,
-// //         automaticallyImplyLeading: false,
-// //         backgroundColor: AppColor.wow2,
-// //       ),
-// //       //drawer: CustomDrawer(auth: FirebaseAuth.instance,),
-// //       bottomNavigationBar:  BottomNavigation(index: 2,),
-// //       body: Obx(() => ListView.builder(
-// //         itemCount: productController.cart.length,
-// //         itemBuilder: (_, index) {
-// //           final item = productController.cart[index];
-// //           return ListTile(
-// //             leading: Image.asset(item.image, width: 50, height: 50),
-// //             title: Text(item.name),
-// //             subtitle: Text("\$${item.price}"),
-// //           );
-// //         },
-// //       )),
-// //     );
-// //   }
-// // }
-//
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import '../../resources/color/color.dart';
-// import '../../resources/customDrawer/bottumNavigation.dart';
-// import '../../viewModal/product_controller/product_controller.dart';
-//
-// class CartScreen extends StatefulWidget {
-//   @override
-//   State<CartScreen> createState() => _CartScreenState();
-// }
-//
-// class _CartScreenState extends State<CartScreen> {
-//   final ProductController productController = Get.find<ProductController>();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: AppColor.whiteColor,
-//       appBar: AppBar(
-//         title: const Text('My Cart'),
-//         centerTitle: true,
-//         automaticallyImplyLeading: false,
-//         backgroundColor: AppColor.wow2,
-//       ),
-//       bottomNavigationBar: BottomNavigation(index: 2),
-//       body: Obx(() {
-//         if (productController.cart.isEmpty) {
-//           return Center(
-//             child: Text(
-//               "Your cart is empty",
-//               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-//             ),
-//           );
-//         }
-//
-//         return Column(
-//           children: [
-//             Expanded(
-//               child: ListView.separated(
-//                 padding: const EdgeInsets.all(12),
-//                 itemCount: productController.cart.length,
-//                 separatorBuilder: (_, __) => const Divider(),
-//                 itemBuilder: (_, index) {
-//                   final item = productController.cart[index];
-//                   return ListTile(
-//                     leading: ClipRRect(
-//                       borderRadius: BorderRadius.circular(8),
-//                       child: Image.asset(item.image, width: 60, height: 60, fit: BoxFit.cover),
-//                     ),
-//                     title: Text(item.name, style: TextStyle(fontWeight: FontWeight.bold)),
-//                     subtitle: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text("Price: \$${item.price}"),
-//                         Text("Subtotal: \$${(item.price * item.quantity).toStringAsFixed(2)}"),
-//                       ],
-//                     ),
-//                     trailing: Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         Row(
-//                           mainAxisSize: MainAxisSize.min,
-//                           children: [
-//                             IconButton(
-//                               icon: Icon(Icons.remove_circle_outline),
-//                               onPressed: () => productController.decrementQuantity(item.id),
-//                             ),
-//                             Text('${item.quantity}', style: TextStyle(fontWeight: FontWeight.bold)),
-//                             IconButton(
-//                               icon: Icon(Icons.add_circle_outline),
-//                               onPressed: () => productController.incrementQuantity(item.id),
-//                             ),
-//                           ],
-//                         ),
-//                       ],
-//                     ),
-//                   );
-//                 },
-//               ),
-//             ),
-//             Container(
-//               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-//               decoration: BoxDecoration(
-//                 color: Colors.grey.shade100,
-//                 boxShadow: [
-//                   BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, -2))
-//                 ],
-//               ),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Text("Total:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-//                   Obx(() => Text(
-//                     "\$${productController.totalPrice.toStringAsFixed(2)}",
-//                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//                   )),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         );
-//       }),
-//     );
-//   }
-// }
-
-
 import 'package:ecommerce/resources/routes/routes_name.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../modal/mobile_modal/orderModal.dart';
 import '../../resources/color/color.dart';
 import '../../resources/customDrawer/bottumNavigation.dart';
+import '../../viewModal/orderController/oredrController.dart';
 import '../../viewModal/product_controller/product_controller.dart';
 
 class CartScreen extends StatefulWidget {
@@ -167,6 +15,24 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final ProductController productController = Get.find<ProductController>();
+
+  void placeOrder() {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final newOrder = OrderModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      items: productController.cart.toList(),
+      total: productController.totalPrice,
+      userId: userId,
+      createdAt: DateTime.now(),
+      status: 'pending',
+    );
+
+    final orderController = Get.put(OrderController());
+    orderController.placeOrder(newOrder);
+    productController.cart.clear(); // Empty cart after placing order
+
+    Get.snackbar("Order Placed", "Your order has been placed successfully!");
+  }
 
 
   @override

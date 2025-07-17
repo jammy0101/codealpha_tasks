@@ -29,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     emailControllerL.dispose();
     passwordControllerL.dispose();
     super.dispose();
@@ -80,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       CustomTextFieldEmail(
                         controller: emailControllerL,
                         hintText: 'Enter the email..',
+                        validator: validateEmail,
                       ),
                       SizedBox(height: 10),
                       Padding(

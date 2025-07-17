@@ -28,7 +28,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController emailControllerR = TextEditingController();
   final TextEditingController passwordControllerR = TextEditingController();
   final TextEditingController confirmPasswordR = TextEditingController();
-
+  String selectedRole = 'Buyer'; // Default
 
   @override
   void dispose() {
@@ -53,7 +53,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 90,horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 70,horizontal: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -81,8 +81,38 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       CustomTextFieldEmail(
                         controller: emailControllerR,
                         hintText: 'Enter the email..',
+                        validator: validateEmail,
                       ),
                       SizedBox(height: 10,),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: DropdownButtonFormField<String>(
+                          value: selectedRole,
+                          decoration: InputDecoration(
+                            labelText: 'Select Role',
+                            hintStyle: TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Colors.black), // optional
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Colors.black), // optional
+                            ),
+                          ),
+                          items: ['Buyer', 'Seller'].map((role) {
+                            return DropdownMenuItem<String>(
+                              value: role,
+                              child: Text(role),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            selectedRole = value!;
+                          },
+                        ),
+                      ),
+
                       Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                           child: Obx(() {
@@ -131,6 +161,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         firebaseServices.registration(
                           email : emailControllerR.text.trim(),
                           password : passwordControllerR.text.toString(),
+                          role: selectedRole.trim(),
                         );
                       }
                     },
