@@ -47,6 +47,7 @@ dependencies:
   device_info_plus: ^10.1.0
   flutter_image_compress: ^2.1.0
   carousel_slider: ^5.1.1
+  google_sign_in: ^6.1.5
   flutter_stripe: ^10.1.1
 
 

@@ -158,8 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 60,
                     loading: firebaseServices.loadingGoogleL.value,
                     title: 'Google',
-                    onPress: (){
-                      //Google integration
+                    onPress: ()async{
+                      await  firebaseServices.loginWithGoogle(role: 'Buyer');
                     },
                     textColor: AppColor.blackColor,
                     buttonColor2: AppColor.wow2,
