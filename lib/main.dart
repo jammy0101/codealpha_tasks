@@ -1,15 +1,10 @@
-import 'package:ecommerce/resources/category_services/category_services.dart';
+
 import 'package:ecommerce/resources/routes/routes.dart';
-import 'package:ecommerce/resources/routes/routes_name.dart';
 import 'package:ecommerce/viewModal/product_controller/product_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
-
 import 'firebase_options.dart';
-import 'modal/mobile_modal/mobil_modal.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();

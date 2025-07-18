@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -29,6 +30,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController passwordControllerR = TextEditingController();
   final TextEditingController confirmPasswordR = TextEditingController();
   String selectedRole = 'Buyer'; // Default
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseServices firebaseServices = Get.put(FirebaseServices());
 
   @override
   void dispose() {
@@ -199,8 +202,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 60,
                     loading: firebaseServices.loadingGoogleRegistration.value,
                     title: 'Google',
-                    onPress: (){
-                      //Here Google integration
+                    onPress: ()async{
+                     await  firebaseServices.loginWithGoogle(role: 'Buyer');
                     },
                     textColor: AppColor.blackColor,
                     buttonColor2: AppColor.wow2,
